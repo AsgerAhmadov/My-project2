@@ -3,7 +3,15 @@ public class Book {
     private String title;
     private String author;
     private Boolean status;
+    private Double price;
 
+    public Book(int id, String title, String author, Boolean status, Double price) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.status = status;
+        this.price = price;
+    }
     public Book(int id, String title, String author, Boolean status) {
         this.id = id;
         this.title = title;
@@ -46,5 +54,14 @@ public class Book {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
 
 }

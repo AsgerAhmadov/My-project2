@@ -1,56 +1,82 @@
+import java.util.List;
+
 public class Library {
-    private Book[] books;
+    private List<Book> books;
     private String[] authors;
     private int bookCount;
 
-    public Library(int capacity) { //100 - 101
-        this.books = new Book[capacity];
-        this.bookCount = 0;
+//    public Library(int capacity) { //100 - 101
+//        this.books = new Book[capacity];
+//        this.bookCount = 0;
+//}
+
+    public void addBoook(Book book) {
+        books.add(book);
+        System.out.println("Kitab ugurla elave olundu...");
+//        if (bookCount < books.size()) {
+//                books[bookCount++] = book;
+//                System.out.println("Kitab elave ugurla olundu...");
+//            }
+//        else{
+//            System.out.println("kitabxana doludu");
+//        }
     }
 
-    public void addBook(Book book) {
-        if (bookCount < books.length) {
-            books[bookCount++] = book;
-            System.out.println("Kitab elave ugurla olundu...");
+    public void addBoookCheck(Book book) {
+        Book byTitle = findByTitle(book.getTitle());
+        if (byTitle.getTitle().equals(book.getTitle())) {
+            throw new BookAlreadyExistsException("bu adda kitab artiq elave olunub");
         } else {
-            System.out.println("Kitabxana doludur , kitab elave ede bilmersiniz");
+            books.add(book);
+            System.out.println("Kitab elave ugurla olundu...");
+
+//        if (bookCount < books.size()) {
+//            books[bookCount++] = book;
+//            System.out.println("Kitab elave ugurla olundu...");
+//        }
         }
+        //eyni adli kitabi kitabxanaya elave ede bilmesin.
+        //findbaytittle cagiririq
+        //qayidan deyeri yoxluyuruq ve yoxluyuruq oturduyumuz paremetrle.
+        // eyni adda olsa xeta atsin.
     }
 
-    public void bookList() {
-        if (bookCount == 0)
-            System.out.println("Kitab yoxdur...");
-        else {
-            for (int i = 0; i < bookCount; i++) {
-                System.out.println(books[i].toString());
+    public static List<Book> bookList(List<Book> books) {
+        if (books.isEmpty()) {
+            System.out.println("Listin ici bosdur");
+        }
+//        if (bookCount == 0)
+//            System.out.println("Kitab yoxdur...");
+//        else {
+//            for (int i = 0; i < bookCount; i++) {
+//                System.out.println(books[i].toString());
+//            }
+//        }
+        return books;
+    }
+
+    public static Book findById(int bookId) {
+        for (Book book : books) {
+
+            if (bookId != book.getId()) {
+                throw new BookNotFountException("bu id kitab tapilmadi...");
             }
-        }
-    }
-
-    public Book findById(int bookId) {
-        for (int i = 0; i < bookCount; i++) {
-
-            Book book = books[i];
-
-            if (bookId == book.getId())
-                return book;
+            return book;
         }
         return null;
     }
 
     public Book findByTitle(String title) {
-        for (int i = 0; i < bookCount; i++) {
-
-            Book book = books[i];
-
+        for (Book book : books) {
             if (title.equalsIgnoreCase(book.getTitle()))
                 return book;
+            throw new BookNotFountException("bu adla kitab tapilmadi ...");
         }
         return null;
     }
 
     public void updateBookStatus(int bookId, Boolean status) {
-        Book foundBook =  findById(bookId);
+        Book foundBook = findById(bookId);
         if (foundBook != null) {
             foundBook.setStatus(status); // true -> Active -- false -> DeActive
             System.out.println("Kitabin statusu yenilendi : " + foundBook.getStatus());
@@ -59,29 +85,59 @@ public class Library {
         }
     }
 
-    // Ele metod yazin ki kitabxanadan kitab goturulsun ve statusu "Deactive" set olunsun...
-    // kitabi silmek metodu olsun .... [10] -> primitive tipler ucun 0
-    // non primitive -> null -> Integer , String , Book
-
-    public void borrowBook(int bookId) {
-       for (int i = 0; i < bookCount ;i++){
-           Book book = findById(i);
-           book.setStatus(false);
-           System.out.println("bu kitab artiq goturulmusdur...");
-       }
-
+    public void borrowBook() {
+        for (Book book: books) {
+            Book foundedBook = findById(book.getId());
+            if (foundedBook.getStatus() == Boolean.TRUE) {
+                foundedBook.setStatus(false);
+                System.out.println("bu kitab goturldu...");
+            } else
+                System.out.println("bu kitab artiq goturule bilmez...");
+        }
 
 
-   }
-// kitabi silmek metodu olsun
-    public Book deleteBook(int bookId  ){
+    }
+
+    public void deleteBook(int bookId) {
         Book findbook = findById(bookId);
         if (findbook != null) {
             findbook = null;
             System.out.println("kitab silindi...");
         }
-        return findbook;
     }
+
+    public void showBook() {
+        for (Book book : books) {
+            if (book.getStatus()) {
+                System.out.println(book.getTitle());
+            }
+        }//10 kitabdan 4 eded true dise array kimi geri qaytar.(return tip array olsun)
 
     }
 
+    public void updatestatus(int bookId) {
+        Book findbook = findById(bookId);
+        if (!findbook.getStatus()) {
+            findbook.setStatus(true);
+            System.out.println("kitab statusu update olundu...");
+        }
+
+    }
+    public static void checkBalance(int bookId, User user){
+        Book byId = findById(bookId);
+        if(byId != null) {
+            if (byId.getPrice() <= user.getBalance()) {
+                user.setBalance(user.getBalance() - byId.getPrice());
+                byId.setStatus(false);
+                System.out.println(user.getBalance());
+            }
+            System.out.println("Balansinizda kifayet qeder mebleg yoxdu");
+        }
+        System.out.println("Bele kitab yoxdu");
+
+    }
+}
+//istifadecinin istediyi kitab varmi ve varsa qiymetini yoxlamaq.
+//istifadecinin balansinda isdetidi kitaba uygun mebleg varmi.
+//kitaba satila bilen olub olmadiqini ucun filt elave edin(alina bilen ya yox).yeni konustruktor yariladacaq.
+//alindiqdan sonra user balanci yenilemek.(metod).kitab silirik.(kitabada update olunmalidir ki bu kitab satilib).

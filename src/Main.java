@@ -2,24 +2,21 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        // Library Management System...
+        User user = new User("Esger","Novruzov",400.0);
+        Library.checkBalance(5,user);
+      Library library = new Library(); // max kitab tutumu 10 olacaq...
 
-        // Library - Book - User(Istifadeci) -- istifade olunacaq classklar
+      library.addBoook(new Book(4,"Qirmizi-kitab","Esger",true,15.5));
+       library.addBoookCheck(new Book(5,"Qirmizi-kib","Esr",true));
 
-        // kitabnaxa ucun istifade olunacaq datalar..
-        // Library -> Book[] books , int bookCount... int capacity(kitablari saxlayan array olcusu)
 
-        // kitab ucun istifade olunacaq datalar...
-        // Book -> int id , String title , String author , String description , String status (yararli / yarasiz)
+        // library.updateBookStatus(4,true);
+        //library.deleteBook(4);
+//        library.borrowBook();
+       // library.showBook();
+       // library.updatestatus(4);
+//        library.findById(4);
+        //library.findByTitle("qirmizi-kitab");
 
-        // user ucun istifade olunacaq datalar...
-        // User -> String name , String username
-
-        Library library = new Library(10); // max kitab tutumu 10 olacaq...
-
-        library.addBook(new Book(4,"Qirmizi-kitab","Esger",true));
-        library.updateBookStatus(4,true);
-        library.deleteBook(4);
-        library.borrowBook(1);
     }
 }
